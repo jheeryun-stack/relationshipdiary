@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>RELATIONSHIP DIARY v2.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Doto:wght@400;500;600;700;800;900&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/NanumGaramYeonKkot/NanumGaramYeonKkot.css" type="text/css"/>
+  <style>
+    
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #f8f6f0;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+      color: #111;
+      overflow: hidden;
+    }
+
+    /* Header Section */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background-color: #001f3f; /* NAVY */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 30px;
+      font-family: 'Pretendard', sans-serif;
+      font-weight: 500;
+    }
+
+    .nav-item {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+
+    .nav-item:hover {
+      opacity: 0.8;
+    }
+
+    .main-title {
+      font-family: 'Doto', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: white;
+      text-align: center;
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    /* Main Content Layout */
+    .main-content {
+      display: flex;
+      height: 100vh;
+      padding-top: 120px; /* Account for header */
+    }
+
+    .left-section {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 40px;
+      padding-top: 80px;
+    }
+
+    .right-section {
+      width: 70%;
+      padding: 40px;
+      overflow: auto;
+    }
+
+    /* Add Button */
+    .add-button {
+      background: #001f3f; /* Navy */
+      color: white;
+      border: none;
+      padding: 20px 60px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 30px;
+      font-family: 'Pretendard', sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .add-button:hover {
+      background: #002a4f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    /* Relationship List */
+    .relationship-list {
+      width: 100%;
+      max-width: 400px;
+      padding-left: 20px;
+    }
+
+    .relationship-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .color-swatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    /* Section Dividers */
+    .vertical-divider {
+      position: fixed;
+      top: 120px;
+      bottom: 160px;
+      width: 2px;
+      background-color: #001f3f;
+      z-index: 100;
+      cursor: col-resize;
+    }
+
+    .horizontal-divider {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #001f3f;
+      z-index: 100;
+      cursor: row-resize;
+    }
+
+    .dotted-divider {
+      position: fixed;
+      top: 120px;
+      bottom: 160px;
+      width: 2px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #001f3f 0px,
+        #001f3f 10px,
+        transparent 10px,
+        transparent 20px
+      );
+      z-index: 100;
+      cursor: col-resize;
+    }
+
+    h1 {
+      font-weight: 800;
+      font-size: 1.6rem;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: none;
+      padding: 6px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      background: #fff;
+      box-shadow: 
+        0 -2px 0 0 transparent,
+        0 2px 0 0 transparent,
+        -2px 0 0 0 transparent,
+        2px 0 0 0 transparent;
+      position: relative;
+    }
+
+    input[type="text"]::before,
+    input[type="text"]::after {
+      content: '';
+      position: absolute;
+      background-image: url('line.png');
+      background-repeat: repeat-x;
+      background-size: auto 2px;
+    }
+
+    input[type="color"] {
+      width: 100%;
+      height: 30px;
+      border: 2px solid #aaa;
+      margin-bottom: 8px;
+      padding: 0;
+      background: none;
+    }
+
+    button {
+      background: #111;
+      color: #fff;
+      border: 2px solid #111;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    #relationshipList {
+      flex-grow: 1;
+      overflow-y: auto;
+      border-top: none;
+      padding-top: 13px;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    #relationshipList::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-image: url('line.png');
+      background-repeat: repeat-x;
+      background-size: auto 3px;
+    }
+
+    .relationship-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .relationship-item-actions { display:flex; gap:6px; }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+    }
+
+    /* Content Modal */
+    .content-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      display: none;
+      z-index: 1500;
+    }
+
+    .content-modal h2 {
+      font-family: 'Doto', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #001f3f;
+    }
+
+    .content-modal p {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      display: none;
+      z-index: 2000;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    /* Graph Area */
+    #graphContainer {
+      width: 100%;
+      height: calc(100vh - 280px); /* Account for header and archive */
+      position: relative;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    #graphContainer::-webkit-scrollbar {
+      display: none;
+    }
+    
+    #graphContainer {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Scrollbar styling for archive */
+    .archive-section::-webkit-scrollbar,
+    .archive-content::-webkit-scrollbar {
+      height: 10px;
+      width: 10px;
+      background: #eee;
+    }
+    .archive-section::-webkit-scrollbar-thumb,
+    .archive-content::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 0;
+    }
+    .archive-section::-webkit-scrollbar-corner,
+    .archive-content::-webkit-scrollbar-corner {
+      background: #eee;
+    }
+
+    /* Resizers */
+    #verticalResizer {
+      width: 6px;
+      cursor: col-resize;
+      background: transparent;
+    }
+    #horizontalResizer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 6px;
+      cursor: row-resize;
+      bottom: 200px; /* aligns with archive height */
+      background: transparent;
+      z-index: 1200;
+    }
+
+    #graph {
+      position: relative;
+      width: calc(31 * 28px);
+      height: calc(10 * 28px);
+      background-image: 
+        linear-gradient(to right, #e0e0e0 1px, transparent 1px),
+        linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+      background-size: 28px 28px;
+      margin: 0;
+    }
+
+    .me-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #001f3f;
+      top: calc(100% - 1px);
+      z-index: 10;
+    }
+
+    .me-label {
+      position: absolute;
+      bottom: -16px;
+      left: -25px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: #001f3f;
+    }
+
+    .line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .point {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .memo {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      font-size: 0.8rem;
+      padding: 4px 6px;
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .point:hover + .memo-display {
+      display: block;
+    }
+
+    /* Axis Labels */
+    .y-axis-labels {
+      position: absolute;
+      bottom: -25px;
+      left: 14px;
+      width: calc(100% - 28px);
+      height: 20px;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.8rem;
+      color: #001f3f;
+    }
+
+    .y-axis-label {
+      width: 28px;
+      text-align: center;
+    }
+
+    .date-label {
+      position: absolute;
+      bottom: -45px;
+      right: 0;
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.8rem;
+      color: #001f3f;
+    }
+
+    /* Month Selector */
+    .month-selector {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .month-button {
+      background: #001f3f;
+      color: white;
+      border: none;
+      padding: 20px 60px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Pretendard', sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      min-width: 120px;
+    }
+
+    .month-button:hover {
+      background: #002a4f;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    /* Add Modal - NEW VERSION */
+    .add-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+      max-width: 450px;
+      width: 90%;
+      display: none;
+      z-index: 2001;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+    }
+
+    .add-modal.show {
+      display: block;
+    }
+
+    .add-modal h3 {
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      text-align: center;
+      color: #001f3f;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+    }
+
+    .add-modal label {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 600;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+    }
+
+    .add-modal input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+      box-sizing: border-box;
+    }
+
+    .add-modal input[type="text"]:focus {
+      outline: none;
+      border-color: #001f3f;
+    }
+
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 4px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .color-option:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .color-option.selected {
+      border-color: #001f3f;
+      box-shadow: 0 0 0 2px white, 0 0 0 4px #001f3f;
+    }
+
+    .add-modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .add-modal-btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-family: 'NanumGaramYeonKkot', sans-serif;
+      transition: all 0.3s;
+      font-weight: 600;
+    }
+
+    .add-modal-btn.primary {
+      background: #001f3f;
+      color: white;
+    }
+
+    .add-modal-btn.secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .add-modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Memo Modal */
+    .memo-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .memo-content {
+      background: white;
+      padding: 20px;
+      width: 400px;
+      max-width: 90%;
+      border: 3px solid #ccc;
+      position: relative;
+    }
+
+    .memo-content::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border: 3px solid transparent;
+      background: 
+        linear-gradient(90deg, transparent calc(100% - 3px), transparent),
+        linear-gradient(0deg, transparent calc(100% - 3px), transparent);
+      background-size: 100% 3px, 3px 100%;
+      background-repeat: repeat-x, repeat-y;
+      background-position: 0 0, 0 0;
+      pointer-events: none;
+    }
+
+    .memo-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .memo-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .memo-text {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .emotion-stickers {
+      margin-bottom: 15px;
+    }
+
+    .emotion-category {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin: 10px 0 5px 0;
+      color: #333;
+    }
+
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .emotion-sticker {
+      cursor: pointer;
+      text-align: center;
+      padding: 5px;
+      transition: background-color 0.2s;
+      border: 1px solid transparent;
+    }
+
+    .emotion-sticker:hover {
+      background-color: #f0f0f0;
+    }
+
+    .emotion-sticker.selected {
+      background-color: #e0e0e0;
+    }
+
+    .photo-upload {
+      margin-bottom: 15px;
+    }
+
+    .photo-input {
+      display: none;
+    }
+
+    .photo-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .photo-btn:hover {
+      background: #0056b3;
+    }
+
+    .photo-preview {
+      max-width: 100px;
+      max-height: 100px;
+      margin-top: 10px;
+    }
+
+    .memo-save {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .memo-save:hover {
+      background: #218838;
+    }
+
+    .memo-display {
+      position: absolute;
+      background: #fff;
+      border: 1px solid #ccc;
+      font-size: 0.8rem;
+      padding: 8px;
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: 200px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .memo-display .memo-text-content {
+      margin-bottom: 5px;
+    }
+
+    .memo-display .memo-emotion {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+
+    .memo-display .memo-photo {
+      max-width: 50px;
+      max-height: 50px;
+      margin-top: 5px;
+    }
+
+    /* Archive Section */
+    .archive-section {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 160px;
+      background: #f8f6f0;
+      border-top: 2px solid #001f3f; /* Navy border */
+      padding: 10px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    .archive-title {
+      font-family: 'Doto', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #001f3f;
+      margin: 0 0 10px 0;
+      text-align: center;
+    }
+
+    .archive-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: visible;
+    }
+
+    .relationship-archive {
+      min-height: 50px;
+      overflow: visible;
+      position: relative;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .relationship-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #111;
+      display: flex;
+      align-items: center;
+      padding-left: 10px;
+    }
+
+    .relationship-color-indicator {
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+      border-radius: 50%;
+    }
+
+    .memo-items {
+      display: flex;
+      align-items: center;
+      height: 30px;
+      white-space: nowrap;
+      overflow: visible;
+      position: relative;
+      width: 100%;
+    }
+
+    .memo-item {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 30px;
+      flex-shrink: 0;
+    }
+
+    .memo-item-photo {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .memo-item-photo:hover {
+      transform: scale(1.1);
+    }
+
+    /* Photo Zoom Modal */
+    .photo-zoom-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .photo-zoom-content {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .photo-zoom-image {
+      max-width: 90vw;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .photo-zoom-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    /* Overview Section */
+    .overview-section {
+      position: absolute;
+      left: 40px; /* graph left margin */
+      bottom: 240px; /* just above archive */
+      text-align: left;
+    }
+
+    .overview-text {
+      display: none; /* moved to menu button */
+    }
+
+    .overview-results {
+      background: white;
+      border: none;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      display: none;
+      position: relative;
+      box-shadow: 
+        0 0 0 3px #ccc inset;
+    }
+
+    .overview-results::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background-image: url('line.png');
+      background-repeat: repeat;
+      background-size: 3px auto;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .overview-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #111;
+    }
+
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: none;
+      position: relative;
+      padding-bottom: 11px;
+    }
+
+    .ranking-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-image: url('dot line.png');
+      background-repeat: repeat-x;
+      background-size: auto 3px;
+    }
+
+    .ranking-item:last-child::after {
+      display: none;
+    }
+
+    .ranking-name {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .ranking-score {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .ranking-color {
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+    }
+
+    /* Sliding animations - constant speed (left to right) */
+    @keyframes slideLeftToRight {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(calc(100vw + 100%)); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="nav-menu">
+      <span class="nav-item" onclick="showModal('about')">about</span>
+      <span class="nav-item" onclick="showModal('howto')">how to</span>
+      <span class="nav-item" onclick="showModal('analysis')">analysis</span>
+      <span class="nav-item" onclick="refreshAll()">refresh</span>
+    </div>
+    <h1 class="main-title">RELATIONSHIP DIARY</h1>
+    <div style="width: 200px;"></div>
+    </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Left Section -->
+    <div class="left-section">
+      <button class="add-button" onclick="showAddModal()">ADD</button>
+      <div class="relationship-list" id="relationshipList"></div>
+  </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+  <div id="graphContainer">
+        <!-- Month Selector -->
+        <div class="month-selector">
+          <button class="month-button" id="monthButton">JAN</button>
+        </div>
+        
+    <div id="graph">
+      <div class="me-line"></div>
+      <div class="me-label">ME</div>
+      <svg id="lines" width="2000" height="600" style="position:absolute;top:0;left:0;"></svg>
+          <div id="yAxisLabels" class="y-axis-labels"></div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Add Modal - NEW VERSION -->
+    <div class="add-modal" id="addModal">
+      <h3>관계 추가</h3>
+      <label for="relationshipName">이름</label>
+      <input type="text" id="relationshipName" placeholder="이름을 입력하세요">
+      
+      <label>색상 선택</label>
+      <div class="color-palette" id="colorPalette">
+        <div class="color-option" data-color="#FFB3BA" style="background: #FFB3BA;"></div>
+        <div class="color-option" data-color="#FFDFBA" style="background: #FFDFBA;"></div>
+        <div class="color-option" data-color="#FFFFBA" style="background: #FFFFBA;"></div>
+        <div class="color-option" data-color="#BAFFC9" style="background: #BAFFC9;"></div>
+        <div class="color-option" data-color="#BAE1FF" style="background: #BAE1FF;"></div>
+        <div class="color-option" data-color="#E0BBE4" style="background: #E0BBE4;"></div>
+        <div class="color-option" data-color="#FFDFD3" style="background: #FFDFD3;"></div>
+        <div class="color-option" data-color="#D4F1F4" style="background: #D4F1F4;"></div>
+        <div class="color-option" data-color="#E8DFF5" style="background: #E8DFF5;"></div>
+        <div class="color-option" data-color="#FCE1E4" style="background: #FCE1E4;"></div>
+        <div class="color-option" data-color="#C7CEEA" style="background: #C7CEEA;"></div>
+        <div class="color-option" data-color="#FFE5D9" style="background: #FFE5D9;"></div>
+      </div>
+      
+      <div class="add-modal-buttons">
+        <button class="add-modal-btn secondary" onclick="hideAddModal()">취소</button>
+        <button class="add-modal-btn primary" onclick="confirmAddRelationship()">추가</button>
+      </div>
+    </div>
+
+  <!-- Content Modals -->
+  <div class="content-modal" id="aboutModal">
+    <button class="close-modal" onclick="hideModal()">&times;</button>
+    <h2>About</h2>
+    <p>관계 일기는 나와 관계를 맺고 있는 사람들과 나의 심리적 거리를 그래프로 시각화하는 도구입니다.</p>
+    <p>좋은 관계를 유지하고 있다면 그래프 최하단의 'Me' 선과 가까운 좌표에 점을 찍고,</p>
+    <p>나쁜 이벤트가 생겼다면 멀어진 만큼 Me'선과 먼 위치의 좌표에 점을 찍어주세요.</p>
+    <p>그래프가 완성되었을 때 'Me'선과 가장 완만하고 가까운 그래프를 형성한 관계가</p>
+    <p>해당 월에 나와 가장 원만한 관계를 유지한 사람입니다.</p>
+    <p>당신과 가장 가까운 사람은 누구인가요?</p>
+  </div>
+
+  <div class="content-modal" id="howtoModal">
+    <button class="close-modal" onclick="hideModal()">&times;</button>
+    <h2>How to Use</h2>
+    <p><strong>1. 관계 추가:</strong> ADD 버튼을 클릭하여 새로운 관계를 추가합니다.</p>
+    <p><strong>2. 관계 선택:</strong> 목록에서 추가된 관계를 선택합니다.</p>
+    <p><strong>3. 좌표 추가:</strong> 그래프를 클릭하여 해당 관계의 점을 추가합니다.</p>
+    <p><strong>4. 메모 작성:</strong> 점을 클릭하면 해당 날짜에 발생한 일에 대한 메모, 이모티콘, 그날의 사진을 추가할 수 있습니다.</p>
+    <p><strong>5. 분석:</strong> analysis 메뉴에서 관계별 점수와 순위를 확인할 수 있습니다.</p>
+    <p><strong>6. 추억:</strong> archive 섹션에서 각 관계별 메모와 사진을 추억할 수 있습니다. 사진을 클릭하면 full size로 볼 수 있습니다.</p>
+    <p><strong>7. refresh 버튼을 클릭하면 모든 정보가 새로고침됩니다.</strong></p>
+  </div>
+
+  <div class="content-modal" id="analysisModal">
+    <button class="close-modal" onclick="hideModal()">&times;</button>
+    <h2>Analysis</h2>
+    <div id="analysisContent">
+      <p>관계 분석 결과가 여기에 표시됩니다.</p>
+    </div>
+  </div>
+
+  <!-- Memo Modal -->
+  <div id="memoModal" class="memo-modal">
+    <div class="memo-content">
+      <div class="memo-header">
+        <h3>메모 추가</h3>
+        <button class="memo-close">&times;</button>
+      </div>
+      <textarea id="memoText" class="memo-text" placeholder="메모를 입력하세요..."></textarea>
+      
+      <div class="emotion-stickers">
+        <div class="emotion-category">Face Emojis</div>
+        <div class="emotion-grid">
+          <div class="emotion-sticker" data-emotion="face emoji/face1.png">
+            <img src="face emoji/face1.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face2.png">
+            <img src="face emoji/face2.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face3.png">
+            <img src="face emoji/face3.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face4.png">
+            <img src="face emoji/face4.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face5.png">
+            <img src="face emoji/face5.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face6.png">
+            <img src="face emoji/face6.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face7.png">
+            <img src="face emoji/face7.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face8.png">
+            <img src="face emoji/face8.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face9.png">
+            <img src="face emoji/face9.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face10.png">
+            <img src="face emoji/face10.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face11.png">
+            <img src="face emoji/face11.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="face emoji/face12.png">
+            <img src="face emoji/face12.png" alt="emoji" style="width:32px;height:32px;">
+          </div>
+        </div>
+        
+        <div class="emotion-category">Weather</div>
+        <div class="emotion-grid">
+          <div class="emotion-sticker" data-emotion="weather/weather1.png">
+            <img src="weather/weather1.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather2.png">
+            <img src="weather/weather2.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather3.png">
+            <img src="weather/weather3.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather4.png">
+            <img src="weather/weather4.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather5.png">
+            <img src="weather/weather5.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather6.png">
+            <img src="weather/weather6.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather7.png">
+            <img src="weather/weather7.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+          <div class="emotion-sticker" data-emotion="weather/weather8.png">
+            <img src="weather/weather8.png" alt="weather" style="width:32px;height:32px;">
+          </div>
+        </div>
+      </div>
+      
+      <div class="photo-upload">
+        <button class="photo-btn" onclick="document.getElementById('photoInput').click()">📷 사진 추가</button>
+        <input type="file" id="photoInput" class="photo-input" accept="image/*" capture="environment">
+        <div id="photoPreview"></div>
+      </div>
+      
+      <button class="memo-save" id="saveMemo">저장</button>
+    </div>
+  </div>
+
+  <!-- Overview Section -->
+  <div class="overview-section">
+    <div class="overview-text" id="overviewText">OVERVIEW</div>
+    <div class="overview-results" id="overviewResults">
+      <div class="overview-title">Relationship Analysis</div>
+      <div id="rankingList"></div>
+    </div>
+  </div>
+
+  <!-- Section Dividers -->
+  <div class="dotted-divider" id="verticalDivider" style="left: 30%;"></div>
+  <div class="horizontal-divider" id="horizontalDivider" style="bottom: 160px;"></div>
+
+  <!-- Archive Section -->
+  <div class="archive-section">
+    <div class="archive-title">ARCHIVE</div>
+    <div id="archiveContainer" class="archive-content"></div>
+  </div>
+
+  <!-- Photo Zoom Modal -->
+  <div id="photoZoomModal" class="photo-zoom-modal">
+    <div class="photo-zoom-content">
+      <button class="photo-zoom-close">&times;</button>
+      <img id="zoomedPhoto" class="photo-zoom-image" alt="Zoomed Photo">
+    </div>
+  </div>
+
+  <script>
+    const graph = document.getElementById('graph');
+    const linesSVG = document.getElementById('lines');
+    const list = document.getElementById('relationshipList');
+    const memoModal = document.getElementById('memoModal');
+    const memoText = document.getElementById('memoText');
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const saveMemoBtn = document.getElementById('saveMemo');
+    const archiveContainer = document.getElementById('archiveContainer');
+    const overviewText = document.getElementById('overviewText');
+    const overviewResults = document.getElementById('overviewResults');
+    const rankingList = document.getElementById('rankingList');
+    const photoZoomModal = document.getElementById('photoZoomModal');
+    const zoomedPhoto = document.getElementById('zoomedPhoto');
+    const xAxisLabels = document.getElementById('xAxisLabels');
+    const yAxisLabels = document.getElementById('yAxisLabels');
+    const verticalDivider = document.getElementById('verticalDivider');
+    const horizontalDivider = document.getElementById('horizontalDivider');
+    
+    // Monthly data storage: { month: { relationships: [...], activeRelId: null } }
+    let monthlyData = {};
+    let relationships = [];
+    let activeRelationship = null;
+    
+    // Initialize monthly data for all months
+    for (let i = 1; i <= 12; i++) {
+      monthlyData[i] = { relationships: [], activeRelId: null };
+    }
+    
+    // Load data from localStorage
+    function loadData() {
+      const saved = localStorage.getItem('relationshipDiary');
+      if (saved) {
+        try {
+          monthlyData = JSON.parse(saved);
+        } catch (e) {
+          console.error('Failed to load data:', e);
+        }
+      }
+    }
+    
+    // Save data to localStorage
+    function saveData() {
+      try {
+        localStorage.setItem('relationshipDiary', JSON.stringify(monthlyData));
+      } catch (e) {
+        console.error('Failed to save data:', e);
+      }
+    }
+    
+    // Load current month's data
+    function loadMonthData() {
+      if (monthlyData[currentMonth]) {
+        relationships = monthlyData[currentMonth].relationships || [];
+        const activeRelId = monthlyData[currentMonth].activeRelId;
+        activeRelationship = relationships.find(r => r.id === activeRelId) || null;
+      } else {
+        relationships = [];
+        activeRelationship = null;
+      }
+      renderList();
+      draw();
+    }
+    
+    // Save current month's data
+    function saveMonthData() {
+      if (!monthlyData[currentMonth]) {
+        monthlyData[currentMonth] = { relationships: [], activeRelId: null };
+      }
+      monthlyData[currentMonth].relationships = relationships;
+      monthlyData[currentMonth].activeRelId = activeRelationship ? activeRelationship.id : null;
+      saveData();
+    }
+
+    // Modal functions
+    function showModal(type) {
+      const modal = document.getElementById(type + 'Modal');
+      const overlay = document.getElementById('modalOverlay');
+      
+      if (type === 'analysis') {
+        updateAnalysisModal();
+      }
+      
+      modal.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+
+    function hideModal() {
+      const modals = document.querySelectorAll('.content-modal');
+      const overlay = document.getElementById('modalOverlay');
+      
+      modals.forEach(modal => {
+        modal.style.display = 'none';
+      });
+      overlay.style.display = 'none';
+    }
+
+    // Refresh function - clear all data and reload
+    function refreshAll() {
+      if (confirm('모든 데이터가 삭제됩니다. 정말 새로고침하시겠습니까?')) {
+        localStorage.removeItem('relationshipDiary');
+        location.reload();
+      }
+    }
+
+    function updateAnalysisModal() {
+      const analysisContent = document.getElementById('analysisContent');
+      
+      if (relationships.length === 0) {
+        analysisContent.innerHTML = '<p>아직 추가된 관계가 없습니다.</p>';
+        return;
+      }
+      
+      const graphHeight = 280; // Graph height (10 * 28px)
+      const meLineY = graphHeight; // ME line is at bottom
+      
+      const analysis = relationships.map(rel => {
+        if (rel.points.length === 0) return null;
+        
+        let totalDistance = 0;
+        
+        // Calculate distance from ME line for each point
+        rel.points.forEach(point => {
+          // Distance from ME line (bottom of graph)
+          // Smaller y value = farther from ME, larger y value = closer to ME
+          const distance = Math.abs(meLineY - point.y);
+          totalDistance += distance;
+        });
+        
+        // Calculate average distance from ME line
+        const avgDistance = totalDistance / rel.points.length;
+        
+        // Calculate score: closer to ME = higher score (1-100)
+        // avgDistance of 0 = score 100
+        // avgDistance of graphHeight = score 0
+        let score = 100 - (avgDistance / graphHeight * 100);
+        
+        // Ensure score is between 1 and 100
+        score = Math.max(1, Math.min(100, Math.round(score)));
+        
+        return {
+          name: rel.name,
+          color: rel.color,
+          score: score,
+          avgDistance: avgDistance,
+          pointCount: rel.points.length
+        };
+      }).filter(item => item !== null);
+      
+      // Sort by score (highest first)
+      analysis.sort((a, b) => b.score - a.score);
+      
+      let html = '<h3>관계별 점수 및 순위</h3>';
+      analysis.forEach((item, index) => {
+        const rank = index + 1;
+        html += `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+            <div style="display: flex; align-items: center;">
+              <div style="width: 30px; font-weight: bold; color: #666;">${rank}위</div>
+              <div style="width: 12px; height: 12px; background: ${item.color}; border-radius: 50%; margin-right: 10px;"></div>
+              <strong>${item.name}</strong>
+            </div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: #007bff;">${item.score}점</div>
+          </div>
+        `;
+      });
+      
+      analysisContent.innerHTML = html;
+    }
+
+
+    // Days per month
+    const daysInMonth = {
+      1: 31,  // JAN
+      2: 28,  // FEB
+      3: 31,  // MAR
+      4: 30,  // APR
+      5: 31,  // MAY
+      6: 30,  // JUNE
+      7: 31,  // JULY
+      8: 31,  // AUG
+      9: 30,  // SEP
+      10: 31, // OCT
+      11: 30, // NOV
+      12: 31  // DEC
+    };
+
+    // Axis Labels
+    function renderAxisLabels() {
+      // Y-axis labels based on current month
+      const days = daysInMonth[currentMonth];
+      const graphWidth = graph.offsetWidth || (31 * 28);
+      graph.style.width = `calc(${days} * 28px)`;
+      
+      yAxisLabels.innerHTML = Array.from({length: days}, (_, i) => i + 1).map(num => 
+        `<div class="y-axis-label">${num}</div>`
+      ).join('');
+    }
+
+    // Month selector functionality
+    let currentMonth = 1;
+    const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE', 'JULY', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const monthButton = document.getElementById('monthButton');
+      
+      // Load saved data on startup
+      loadData();
+      
+      // Initialize month button and load month data
+      updateMonthButton();
+      renderAxisLabels();
+      loadMonthData();
+      
+      // Add wheel event listener to graph container for month switching
+      const graphContainer = document.getElementById('graphContainer');
+      graphContainer.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        if (e.ctrlKey || e.metaKey) {
+          // Ctrl/Cmd + wheel for month switching
+          // Save current month before switching
+          saveMonthData();
+          
+          if (e.deltaY > 0) {
+            // Scroll down - next month
+            currentMonth = currentMonth < 12 ? currentMonth + 1 : 1;
+          } else {
+            // Scroll up - previous month
+            currentMonth = currentMonth > 1 ? currentMonth - 1 : 12;
+          }
+          updateMonthButton();
+          renderAxisLabels();
+          loadMonthData();
+        }
+      });
+      
+      // Add click event to month button for manual selection
+      monthButton.addEventListener('click', function() {
+        // Save current month before switching
+        saveMonthData();
+        
+        currentMonth = currentMonth < 12 ? currentMonth + 1 : 1;
+        updateMonthButton();
+        renderAxisLabels();
+        loadMonthData();
+      });
+    });
+    
+    function updateMonthButton() {
+      const monthButton = document.getElementById('monthButton');
+      if (monthButton) {
+        monthButton.textContent = monthNames[currentMonth - 1];
+      }
+    }
+
+    let currentPoint = null;
+    let selectedFaceEmotion = null;
+    let selectedWeatherEmotion = null;
+    let selectedPhoto = null;
+
+    // Zoom & Pan state
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isPanning = false;
+    let panStartX = 0;
+    let panStartY = 0;
+
+    function applyTransform() {
+      graph.style.transformOrigin = '0 0';
+      graph.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    window.handleZoom = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        // Ctrl/Cmd + wheel for month switching - handled by month selector
+        return;
+      }
+      e.preventDefault();
+      const delta = Math.sign(e.deltaY);
+      const zoomFactor = 0.1;
+      const newScale = Math.min(3, Math.max(0.5, scale * (1 - delta * zoomFactor)));
+      scale = newScale;
+      applyTransform();
+    };
+
+    window.startPan = (e) => {
+      isPanning = true;
+      panStartX = e.clientX - translateX;
+      panStartY = e.clientY - translateY;
+      document.addEventListener('mousemove', onPanMove);
+      document.addEventListener('mouseup', endPan);
+    };
+
+    function onPanMove(e) {
+      if (!isPanning) return;
+      translateX = e.clientX - panStartX;
+      translateY = e.clientY - panStartY;
+      applyTransform();
+    }
+
+    function endPan() {
+      isPanning = false;
+      document.removeEventListener('mousemove', onPanMove);
+      document.removeEventListener('mouseup', endPan);
+    }
+
+
+
+
+      // Close modal on overlay click
+      document.getElementById('modalOverlay').onclick = function() {
+        // Check which modal is open and close accordingly
+        const addModal = document.getElementById('addModal');
+        if (addModal && addModal.style.display === 'block') {
+          hideAddModal();
+        } else {
+          hideModal();
+        }
+      };
+
+    // Divider resizing functionality
+    let isResizingVertical = false;
+    let isResizingHorizontal = false;
+    let startX = 0;
+    let startY = 0;
+
+    // Initialize everything when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM Content Loaded - Initializing color palette');
+      initColorPalette();
+    });
+
+    // Initialize divider event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const vDivider = document.getElementById('verticalDivider');
+      const hDivider = document.getElementById('horizontalDivider');
+      
+      if (vDivider) {
+        vDivider.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          isResizingVertical = true;
+          startX = e.clientX;
+          document.addEventListener('mousemove', onVerticalResize);
+          document.addEventListener('mouseup', endVerticalResize);
+          document.body.style.cursor = 'col-resize';
+          document.body.style.userSelect = 'none';
+        });
+      }
+      
+      if (hDivider) {
+        hDivider.addEventListener('mousedown', function(e) {
+          e.preventDefault();
+          isResizingHorizontal = true;
+          startY = e.clientY;
+          document.addEventListener('mousemove', onHorizontalResize);
+          document.addEventListener('mouseup', endHorizontalResize);
+          document.body.style.cursor = 'row-resize';
+          document.body.style.userSelect = 'none';
+        });
+      }
+    });
+
+    function onVerticalResize(e) {
+      if (!isResizingVertical) return;
+      e.preventDefault();
+      const deltaX = e.clientX - startX;
+      const newLeft = Math.min(80, Math.max(20, (30 + deltaX / window.innerWidth * 100)));
+      
+      const vDivider = document.getElementById('verticalDivider');
+      if (vDivider) {
+        vDivider.style.left = newLeft + '%';
+      }
+      
+      // Update section widths
+      const leftSection = document.querySelector('.left-section');
+      const rightSection = document.querySelector('.right-section');
+      if (leftSection && rightSection) {
+        leftSection.style.width = newLeft + '%';
+        rightSection.style.width = (100 - newLeft) + '%';
+      }
+    }
+
+    function onHorizontalResize(e) {
+      if (!isResizingHorizontal) return;
+      e.preventDefault();
+      const deltaY = startY - e.clientY;
+      // Limit max to prevent overlap with vertical divider area (leave space for header)
+      const maxBottom = window.innerHeight - 120 - 100; // 100px min space for graph
+      const newBottom = Math.min(maxBottom, Math.max(50, 160 + deltaY));
+      
+      const hDivider = document.getElementById('horizontalDivider');
+      if (hDivider) {
+        hDivider.style.bottom = newBottom + 'px';
+      }
+      
+      // Update vertical divider bottom to match
+      const vDivider = document.getElementById('verticalDivider');
+      if (vDivider) {
+        vDivider.style.bottom = newBottom + 'px';
+      }
+      
+      // Update archive height
+      const archiveSection = document.querySelector('.archive-section');
+      if (archiveSection) {
+        archiveSection.style.height = newBottom + 'px';
+      }
+      
+      // Update graph container height
+      const graphContainer = document.getElementById('graphContainer');
+      if (graphContainer) {
+        graphContainer.style.height = `calc(100vh - ${120 + newBottom}px)`;
+      }
+    }
+
+    function endVerticalResize() {
+      isResizingVertical = false;
+      document.removeEventListener('mousemove', onVerticalResize);
+      document.removeEventListener('mouseup', endVerticalResize);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    function endHorizontalResize() {
+      isResizingHorizontal = false;
+      document.removeEventListener('mousemove', onHorizontalResize);
+      document.removeEventListener('mouseup', endHorizontalResize);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    function renderList() {
+      list.innerHTML = relationships.map((r, i) => {
+        const isActive = activeRelationship && activeRelationship.id === r.id;
+        return `
+          <div class="relationship-item" onclick="setActive(${i})" style="${isActive ? 'font-weight: bold; opacity: 1;' : 'opacity: 0.7;'}">
+            <div class="color-swatch" style="background:${r.color}"></div>
+            ${r.name}${isActive ? ' ✓' : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.setActive = (i) => {
+      activeRelationship = relationships[i];
+      console.log('Active relationship set to:', activeRelationship.name);
+      renderList(); // Re-render to show selection
+    };
+
+    // ADD MODAL - COMPLETELY NEW CODE
+    let selectedColor = '#FFB3BA';
+
+    window.showAddModal = function() {
+      console.log('Opening ADD modal');
+      const modal = document.getElementById('addModal');
+      const overlay = document.getElementById('modalOverlay');
+      
+      if (modal && overlay) {
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+        document.getElementById('relationshipName').value = '';
+        selectedColor = '#FFB3BA';
+        updateColorSelection();
+      } else {
+        console.error('Modal elements not found');
+      }
+    }
+
+    window.hideAddModal = function() {
+      console.log('Closing ADD modal');
+      document.getElementById('addModal').style.display = 'none';
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    window.confirmAddRelationship = function() {
+      const nameInput = document.getElementById('relationshipName');
+      const name = nameInput.value.trim();
+      
+      if (!name) {
+        alert('이름을 입력해주세요.');
+        return;
+      }
+      
+      console.log('Adding relationship:', name, 'with color:', selectedColor);
+      
+      const rel = {
+        id: Date.now(),
+        name: name,
+        color: selectedColor,
+        points: []
+      };
+      
+      relationships.push(rel);
+      activeRelationship = rel;
+      saveMonthData();
+      renderList();
+      hideAddModal();
+      
+      console.log('Relationship added successfully');
+    }
+
+    function updateColorSelection() {
+      const colorOptions = document.querySelectorAll('.color-option');
+      colorOptions.forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.color.toUpperCase() === selectedColor.toUpperCase()) {
+          option.classList.add('selected');
+        }
+      });
+    }
+
+    // Initialize color palette click handlers
+    function initColorPalette() {
+      const colorOptions = document.querySelectorAll('.color-option');
+      console.log('Found', colorOptions.length, 'color options');
+      
+      colorOptions.forEach(option => {
+        option.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          selectedColor = this.dataset.color;
+          console.log('Color selected:', selectedColor);
+          updateColorSelection();
+        });
+      });
+    }
+
+    window.editRelationship = (i) => {
+      const newName = prompt('Rename relationship', relationships[i].name);
+      if (newName) {
+        relationships[i].name = newName;
+        saveMonthData();
+        renderList();
+        draw();
+      }
+    };
+
+    window.deleteRelationship = (i) => {
+      if (!confirm('Delete this relationship?')) return;
+      relationships.splice(i, 1);
+      if (activeRelationship === relationships[i]) activeRelationship = null;
+      saveMonthData();
+      renderList();
+      draw();
+    };
+
+    graph.addEventListener('click', e => {
+      if (!activeRelationship) return alert("Select a relationship first");
+      const rect = graph.getBoundingClientRect();
+      const x = (e.clientX - rect.left - translateX) / scale;
+      const y = (e.clientY - rect.top - translateY) / scale;
+
+      // Snap to grid (28px interval)
+      const cell = 28;
+      const gridX = Math.round(x / cell) * cell;
+      const gridY = Math.round(y / cell) * cell;
+
+      // Check if this location already has memos from other relationships
+      const existingMemos = [];
+      relationships.forEach(rel => {
+        rel.points.forEach(point => {
+          if (point.x === gridX && point.y === gridY && point.memo) {
+            existingMemos.push({ relationship: rel.name, color: rel.color, memo: point.memo });
+          }
+        });
+      });
+
+      if (existingMemos.length > 0) {
+        // Check if current relationship already has a memo at this location
+        const currentRelHasMemo = activeRelationship.points.some(point => 
+          point.x === gridX && point.y === gridY && point.memo
+        );
+        
+        if (currentRelHasMemo) {
+          // Show existing memos instead of creating new one
+          showExistingMemos(existingMemos, gridX, gridY);
+          return;
+        }
+        // If current relationship doesn't have memo here, allow adding new one
+      }
+
+      currentPoint = { x: gridX, y: gridY };
+      showMemoModal();
+    });
+
+    function showMemoModal() {
+      memoModal.style.display = 'flex';
+      memoText.value = '';
+      selectedFaceEmotion = null;
+      selectedWeatherEmotion = null;
+      selectedPhoto = null;
+      photoPreview.innerHTML = '';
+      
+      // Reset emotion stickers
+      document.querySelectorAll('.emotion-sticker').forEach(sticker => {
+        sticker.classList.remove('selected');
+      });
+    }
+
+    function hideMemoModal() {
+      memoModal.style.display = 'none';
+    }
+
+    function showExistingMemos(existingMemos, x, y) {
+      // Create a modal to show all existing memos at this location
+      const existingModal = document.createElement('div');
+      existingModal.className = 'memo-modal';
+      existingModal.style.zIndex = '1500';
+      
+      const content = document.createElement('div');
+      content.className = 'memo-content';
+      content.style.maxWidth = '500px';
+      
+      let memoContent = '<div class="memo-header"><h3>Existing Memos at This Location</h3><button class="memo-close" onclick="this.parentElement.parentElement.parentElement.remove()">&times;</button></div>';
+      
+      existingMemos.forEach((item, index) => {
+        memoContent += `
+          <div style="border: 1px solid #ddd; padding: 10px; margin: 10px 0; background: #f9f9f9;">
+            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+              <div style="width: 12px; height: 12px; background: ${item.color}; margin-right: 8px;"></div>
+              <strong>${item.relationship}</strong>
+            </div>
+            ${item.memo.text ? `<div style="margin-bottom: 5px;">${item.memo.text}</div>` : ''}
+            ${item.memo.faceEmotion ? `<div style="margin-bottom: 5px;"><img src="${item.memo.faceEmotion}" style="width:24px;height:24px;"></div>` : ''}
+            ${item.memo.weatherEmotion ? `<div style="margin-bottom: 5px;"><img src="${item.memo.weatherEmotion}" style="width:24px;height:24px;"></div>` : ''}
+            ${item.memo.photo ? `<div><img src="${item.memo.photo}" style="max-width:100px;max-height:100px;"></div>` : ''}
+          </div>
+        `;
+      });
+      
+      memoContent += '<div style="text-align: center; margin-top: 15px;"><button onclick="this.parentElement.parentElement.parentElement.remove()">Close</button></div>';
+      
+      content.innerHTML = memoContent;
+      existingModal.appendChild(content);
+      document.body.appendChild(existingModal);
+      
+      // Close on background click
+      existingModal.onclick = (e) => {
+        if (e.target === existingModal) existingModal.remove();
+      };
+    }
+
+    // Modal event listeners
+    document.querySelector('.memo-close').onclick = hideMemoModal;
+    memoModal.onclick = (e) => {
+      if (e.target === memoModal) hideMemoModal();
+    };
+
+    // Emotion sticker selection (multiple selection allowed)
+    document.querySelectorAll('.emotion-sticker').forEach(sticker => {
+      sticker.onclick = () => {
+        const emotionPath = sticker.dataset.emotion;
+        
+        if (emotionPath.includes('face emoji/')) {
+          // Face emotion selection
+          document.querySelectorAll('.emotion-sticker[data-emotion*="face emoji"]').forEach(s => s.classList.remove('selected'));
+          sticker.classList.add('selected');
+          selectedFaceEmotion = emotionPath;
+        } else if (emotionPath.includes('weather/')) {
+          // Weather emotion selection
+          document.querySelectorAll('.emotion-sticker[data-emotion*="weather"]').forEach(s => s.classList.remove('selected'));
+          sticker.classList.add('selected');
+          selectedWeatherEmotion = emotionPath;
+        }
+      };
+    });
+
+    // Photo upload
+    photoInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          selectedPhoto = e.target.result;
+          photoPreview.innerHTML = `<img src="${selectedPhoto}" class="photo-preview" alt="Preview">`;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Save memo
+    saveMemoBtn.onclick = () => {
+      if (!currentPoint) return;
+      
+      const memo = {
+        text: memoText.value,
+        faceEmotion: selectedFaceEmotion,
+        weatherEmotion: selectedWeatherEmotion,
+        photo: selectedPhoto
+      };
+      
+      currentPoint.memo = memo;
+      activeRelationship.points.push(currentPoint);
+      saveMonthData();
+      draw();
+      hideMemoModal();
+    };
+
+    function draw() {
+      linesSVG.innerHTML = '';
+      
+      // Clear existing points and memos
+      document.querySelectorAll('.point, .memo-display').forEach(el => el.remove());
+      
+      relationships.forEach(rel => {
+        if (rel.points.length < 1) return;
+        const pathData = rel.points.map((p, i) => {
+          if (i === 0) return `M ${p.x} ${p.y}`;
+          
+          // Add some randomness to make it look hand-drawn
+          const prevPoint = rel.points[i-1];
+          const midX = (prevPoint.x + p.x) / 2 + (Math.random() - 0.5) * 4;
+          const midY = (prevPoint.y + p.y) / 2 + (Math.random() - 0.5) * 4;
+          
+          return `Q ${midX} ${midY} ${p.x} ${p.y}`;
+        }).join(' ');
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathData);
+        path.setAttribute('stroke', rel.color);
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.style.filter = 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))';
+        linesSVG.appendChild(path);
+
+        rel.points.forEach(p => {
+          const dot = document.createElement('div');
+          dot.className = 'point';
+          dot.style.color = rel.color;
+          dot.style.left = p.x + 'px';
+          dot.style.top = p.y + 'px';
+          dot.dataset.x = p.x;
+          dot.dataset.y = p.y;
+          
+          // Show all memos at this location on hover
+          dot.addEventListener('mouseenter', function() {
+            showMemosAtLocation(p.x, p.y);
+          });
+          dot.addEventListener('mouseleave', function() {
+            hideMemosAtLocation();
+          });
+          
+          graph.appendChild(dot);
+        });
+      });
+      
+      // Update archive
+      updateArchive();
+    }
+    
+    function showMemosAtLocation(x, y) {
+      // Hide any existing memo displays
+      hideMemosAtLocation();
+      
+      // Find all memos at this location
+      const memosAtLocation = [];
+      relationships.forEach(rel => {
+        rel.points.forEach(p => {
+          if (p.x === x && p.y === y && p.memo) {
+            memosAtLocation.push({
+              relationship: rel.name,
+              color: rel.color,
+              memo: p.memo
+            });
+          }
+        });
+      });
+      
+      if (memosAtLocation.length === 0) return;
+      
+      // Create combined memo display
+      const memoDisplay = document.createElement('div');
+      memoDisplay.className = 'memo-display active-memo-display';
+      memoDisplay.style.left = (x + 10) + 'px';
+      memoDisplay.style.top = (y - 20) + 'px';
+      memoDisplay.style.display = 'block';
+      memoDisplay.style.maxWidth = '300px';
+      memoDisplay.style.whiteSpace = 'normal';
+      
+      let memoContent = '';
+      memosAtLocation.forEach((item, index) => {
+        if (index > 0) {
+          memoContent += '<hr style="margin:8px 0;border:none;border-top:1px solid #ddd;">';
+        }
+        
+        memoContent += `<div style="margin-bottom:5px;"><strong style="color:${item.color};">${item.relationship}</strong></div>`;
+        
+        // 이모티콘
+        if (item.memo.faceEmotion || item.memo.weatherEmotion) {
+          memoContent += `<div style="display:flex;gap:4px;margin-bottom:5px;">`;
+          if (item.memo.faceEmotion) {
+            memoContent += `<img src="${item.memo.faceEmotion}" style="width:24px;height:24px;">`;
+          }
+          if (item.memo.weatherEmotion) {
+            memoContent += `<img src="${item.memo.weatherEmotion}" style="width:24px;height:24px;">`;
+          }
+          memoContent += `</div>`;
+        }
+        // 사진
+        if (item.memo.photo) {
+          memoContent += `<img src="${item.memo.photo}" class="memo-photo" alt="Photo">`;
+        }
+        // 텍스트
+        if (item.memo.text) {
+          memoContent += `<div class="memo-text-content">${item.memo.text}</div>`;
+        }
+      });
+      
+      memoDisplay.innerHTML = memoContent;
+      graph.appendChild(memoDisplay);
+    }
+    
+    function hideMemosAtLocation() {
+      const activeDisplay = document.querySelector('.active-memo-display');
+      if (activeDisplay) {
+        activeDisplay.remove();
+      }
+    }
+
+    function updateArchive() {
+      // Update archive without resetting animations
+      relationships.forEach((rel, index) => {
+        if (rel.points.length === 0) return;
+        
+        // Check if archive for this relationship already exists
+        let archiveDiv = archiveContainer.querySelector(`[data-rel-id="${rel.id}"]`);
+        
+        if (!archiveDiv) {
+          // Create new archive entry
+          archiveDiv = document.createElement('div');
+          archiveDiv.className = 'relationship-archive';
+          archiveDiv.dataset.relId = rel.id;
+          archiveDiv.dataset.memoCount = '0';
+          
+          const label = document.createElement('div');
+          label.className = 'relationship-label';
+          label.innerHTML = `
+            <div class="relationship-color-indicator" style="background: ${rel.color}"></div>
+            ${rel.name}
+          `;
+          
+          const itemsContainer = document.createElement('div');
+          itemsContainer.className = 'memo-items';
+          
+          const itemsWrapper = document.createElement('div');
+          itemsWrapper.className = 'memo-items-wrapper';
+          itemsWrapper.style.display = 'flex';
+          itemsWrapper.style.position = 'absolute';
+          itemsWrapper.style.left = '0';
+          
+          itemsContainer.appendChild(itemsWrapper);
+          archiveDiv.appendChild(label);
+          archiveDiv.appendChild(itemsContainer);
+          archiveContainer.appendChild(archiveDiv);
+        }
+        
+        // Update items in wrapper - only add new memos
+        const itemsWrapper = archiveDiv.querySelector('.memo-items-wrapper');
+        if (!itemsWrapper) return;
+        
+        // Count existing memos in data
+        const currentMemoCount = parseInt(archiveDiv.dataset.memoCount || '0');
+        const memosWithData = rel.points.filter(p => p.memo);
+        const newMemoCount = memosWithData.length;
+        
+        // Only proceed if there are new memos
+        if (newMemoCount > currentMemoCount) {
+          // Add new memos only - NO CLONING
+          const newMemos = memosWithData.slice(currentMemoCount);
+          newMemos.forEach(p => {
+            const item = document.createElement('div');
+            item.className = 'memo-item';
+            
+            let itemContent = '<div style="display:flex;align-items:center;gap:10px;">';
+            
+            // 이모티콘
+            if (p.memo.faceEmotion || p.memo.weatherEmotion) {
+              if (p.memo.faceEmotion) {
+                itemContent += `<img src="${p.memo.faceEmotion}" style="width:20px;height:20px;flex-shrink:0;">`;
+              }
+              if (p.memo.weatherEmotion) {
+                itemContent += `<img src="${p.memo.weatherEmotion}" style="width:20px;height:20px;flex-shrink:0;">`;
+              }
+            }
+            
+            // 사진
+            if (p.memo.photo) {
+              itemContent += `<img src="${p.memo.photo}" class="memo-item-photo" alt="Photo" onclick="showPhotoZoom('${p.memo.photo}')" style="width:30px;height:30px;object-fit:cover;flex-shrink:0;">`;
+            }
+            
+            // 텍스트
+            if (p.memo.text) {
+              itemContent += `<div style="font-size:0.7rem;color:#333;flex-shrink:0;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.memo.text}</div>`;
+            }
+            
+            itemContent += '</div>';
+            
+            item.innerHTML = itemContent;
+            itemsWrapper.appendChild(item);
+          });
+          
+          // Update memo count
+          archiveDiv.dataset.memoCount = newMemoCount.toString();
+          
+          // Calculate animation duration based on content width for constant speed
+          // Speed: 75px per second
+          const totalWidth = itemsWrapper.scrollWidth;
+          const screenWidth = window.innerWidth;
+          // Total distance: from left outside screen to right outside screen
+          const totalDistance = totalWidth + screenWidth;
+          const duration = totalDistance / 75; // 75px per second
+          
+          // Restart animation with new duration
+          itemsWrapper.style.animation = 'none';
+          setTimeout(() => {
+            itemsWrapper.style.animation = `slideLeftToRight ${duration}s linear infinite`;
+          }, 10);
+        }
+      });
+      
+      // Remove archives for deleted relationships
+      const existingArchives = archiveContainer.querySelectorAll('.relationship-archive');
+      existingArchives.forEach(archive => {
+        const relId = parseInt(archive.dataset.relId);
+        const relExists = relationships.some(r => r.id === relId);
+        if (!relExists) {
+          archive.remove();
+        }
+      });
+    }
+
+    // Photo zoom functionality
+    window.showPhotoZoom = (photoSrc) => {
+      zoomedPhoto.src = photoSrc;
+      photoZoomModal.style.display = 'flex';
+    };
+
+    // Close photo zoom modal
+    document.querySelector('.photo-zoom-close').onclick = () => {
+      photoZoomModal.style.display = 'none';
+    };
+
+    photoZoomModal.onclick = (e) => {
+      if (e.target === photoZoomModal) {
+        photoZoomModal.style.display = 'none';
+      }
+    };
+
+    // Overview analysis functionality
+    overviewText.onclick = () => {
+      if (overviewResults.style.display === 'none' || overviewResults.style.display === '') {
+        analyzeRelationships();
+        overviewResults.style.display = 'block';
+      } else {
+        overviewResults.style.display = 'none';
+      }
+    };
+
+    function analyzeRelationships() {
+      const graphHeight = 280; // Graph height (10 * 28px)
+      const meLineY = graphHeight; // ME line is at bottom
+      
+      const analysis = relationships.map(rel => {
+        if (rel.points.length === 0) return null;
+        
+        let totalDistance = 0;
+        
+        // Calculate distance from ME line for each point
+        rel.points.forEach(point => {
+          // Distance from ME line (bottom of graph)
+          const distance = Math.abs(meLineY - point.y);
+          totalDistance += distance;
+        });
+        
+        // Calculate average distance from ME line
+        const avgDistance = totalDistance / rel.points.length;
+        
+        // Calculate score: closer to ME = higher score (1-100)
+        let score = 100 - (avgDistance / graphHeight * 100);
+        
+        // Ensure score is between 1 and 100
+        score = Math.max(1, Math.min(100, Math.round(score)));
+        
+        return {
+          name: rel.name,
+          color: rel.color,
+          score: score,
+          avgDistance: avgDistance,
+          pointCount: rel.points.length
+        };
+      }).filter(item => item !== null);
+      
+      // Sort by score (highest first)
+      analysis.sort((a, b) => b.score - a.score);
+      
+      // Display results with ranking
+      rankingList.innerHTML = analysis.map((item, index) => `
+        <div class="ranking-item">
+          <div class="ranking-name">
+            <div style="width: 30px; font-weight: bold; color: #666; margin-right: 5px;">${index + 1}위</div>
+            <div class="ranking-color" style="background: ${item.color}"></div>
+            ${item.name}
+          </div>
+          <div class="ranking-score">${item.score}점</div>
+        </div>
+      `).join('');
+    }
+
+  </script>
+</body>
+</html>
+</html>
